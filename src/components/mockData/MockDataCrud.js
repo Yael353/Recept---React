@@ -42,6 +42,11 @@ const MockDataCrud = () => {
                         <li>{step}</li>
                       ))}
                     </ul>
+                    {/**rodrigo edit, delete func, place right top corner */}
+                    <div className="flex gap-4">
+                        <button className="rounded-md px-4 py-1.5 bg-gray-400 text-white">Edit</button>
+                        <button className="rounded-md px-4 py-1.5 bg-red-400 text-white">Delete</button>
+                    </div>
                   </div>
                 </li>
               </div>
@@ -51,23 +56,7 @@ const MockDataCrud = () => {
           )}
         </ul>
       </div>
-      <div className="flex flex-col max-w-[400px] bg-white border border-gray-100 shadow-lg px-4 py-6">
-        <div className="flex flex-col">
-          <label htmlFor="title" className="font-semibold">
-            Add title
-          </label>
-          <input
-            type="text"
-            placeholder="Title"
-            className="border border-gray p-1 mb-4"
-          />
-        </div>
-        <div>
-          <button className="rounded-md bg-black px-4 py-1.5 text-white">
-            Add Recipe
-          </button>
-        </div>
-      </div>
+    
     </div>
   );
 };

@@ -1,7 +1,16 @@
 import React from "react";
 import { useState, useEffect } from "react";
-
 import RECIPES_MOCK from "../mockData/recipes.json";
+
+function ShowIngredientsComponent({ ingredientList }) {
+  return (
+    <>
+      <ul>
+        <li></li>
+      </ul>
+    </>
+  );
+}
 
 export default function GetRecipes() {
   const [recipes, setRecipes] = useState(null);
@@ -16,13 +25,15 @@ export default function GetRecipes() {
 
   if (recipes) {
     return (
-      <div>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <h2>Recipes List</h2>
         <ul>
           {recipes.map((recipe) => (
             <li key={recipe.id}>
-              <h3>{recipe.title}</h3>
-              <h3>{recipe.ingredients}</h3>
+              <h3>Title: {recipe.title}</h3>
+              <textarea rows="4" cols="50">
+                <p>{recipe.ingredients}</p>
+              </textarea>
               {/* <button onClick={() => deleteBook(book.id)}>Delete</button> */}
             </li>
           ))}

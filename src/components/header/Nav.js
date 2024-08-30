@@ -1,16 +1,14 @@
 import React from "react";
-import ApiPage from "../../ApiPage";
 
 function Nav() {
   return (
     <nav className="flex flex-row gap-10 h-[60px] bg-pink-300">
       <ul className="flex gap-4">
         <li>
-
-          <a href="">API</a>
+          <a href="../../pages/ApiPage.html">API</a>
         </li>
         <li>
-            <a href="">Mock data</a>
+          <a href="/mock-data">Mock Data</a>
         </li>
       </ul>
     </nav>

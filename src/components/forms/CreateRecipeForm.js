@@ -47,7 +47,7 @@ function RecipeForm() {
 
   return (
     <form
-      className="recForm flex flex-col bg-pink-300 m-20 p-20 justify-center items-center rounded-lg w-[40%]"
+      className="recForm flex flex-col bg-pink-300 m-20 p-20 justify-center items-center rounded-lg w-[40%] mx-auto"
       onSubmit={handleSubmit}
     >
       <section className="firstPart ">

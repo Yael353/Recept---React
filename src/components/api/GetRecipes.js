@@ -5,18 +5,25 @@ import RECIPES_MOCK from "../mockData/recipes.json";
 //Component Show Ingredients Array from recipes.json
 function ShowIngredientsComponent({ ingredients }) {
   return (
-    <>
-      <h3>Ingredients</h3>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        marginLeft: 200,
+      }}
+    >
+      <h2>Ingredients</h2>
       <ul>
-        {ingredients.map((ingredient) => (
-          <li key={ingredient.index}>
+        {ingredients.map((ingredient, index) => (
+          <li key={index}>
             <p>{ingredient}</p>
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
+
 //Component Get and Show recipes from recipes.json
 export default function GetRecipes() {
   const [recipes, setRecipes] = useState(null);
@@ -27,8 +34,7 @@ export default function GetRecipes() {
     fetchRecipes();
   }, []);
 
-  /* console.log(recipes); */
-
+  //JSX code
   if (recipes) {
     return (
       <div style={{ display: "flex", flexDirection: "column" }}>
@@ -37,7 +43,7 @@ export default function GetRecipes() {
           style={{
             display: "flex",
             flexDirection: "column",
-            background: "grey",
+            background: " #faf5ff",
             gap: 10,
           }}
         >
@@ -45,7 +51,16 @@ export default function GetRecipes() {
             <li key={recipe.id}>
               <h3>Title: {recipe.title}</h3>
               <ShowIngredientsComponent ingredients={recipe.ingredients} />
-              {/* <button onClick={() => deleteBook(book.id)}>Delete</button> */}
+              <button
+                style={{
+                  background: "red",
+                  marginLeft: 100,
+                  borderRadius: 5,
+                  color: "grey",
+                }}
+              >
+                Delete Btn
+              </button>
               <hr></hr>
             </li>
           ))}

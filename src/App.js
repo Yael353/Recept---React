@@ -1,9 +1,12 @@
 import "./App.css";
+import Nav from "./components/header/Nav";
 
 function App() {
   return (
     <>
-      <h1>Tjaba!</h1>
+    <Nav />
+  
+      
     </>
   );
 }

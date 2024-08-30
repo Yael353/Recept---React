@@ -1,70 +1,34 @@
-# Getting Started with Create React App
+Förslag på projekt för Boiler Room:
+Projekt: Bygg en interaktiv webbapplikation: Receptdelningsplattform (Uppdaterad för React)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Beskrivning:
 
-## Available Scripts
+Ni ska vidareutveckla er webbapplikation som tillåter användare att skapa och visa upp recept, men nu genom att implementera den i React. Applikationen ska inkludera funktioner som användarregistrering, inloggning, skapande av recept, betygsättning och kategorisering av recept. Det här projektet ger en djupare förståelse för användargenererat innehåll, hantering av media (bilder), och skapandet av en dynamisk och interaktiv webbupplevelse i React..
 
-In the project directory, you can run:
+Krav:
 
-### `npm start`
+Migrera befintlig kod till React: Implementera applikationen från förra veckan i React, och utnyttja komponentbaserad arkitektur.
+Använda Mockdata: Använd recipes.json som mockdata för att initialt testa och implementera CRUD-operationer. Detta säkerställer att ni kan hantera och manipulera receptdata lokalt innan ni integrerar externa API
+CRUD-operationer med Fetch API: Implementera minst Create-operationen med hjälp av Fetch API för att hantera receptdata. Om möjligt, implementera även Read, Update och Delete-operationer.. Ni kan börja med mockdata och sedan utöka applikationen för att interagera med externa AP
+API-integration: Efter att ha implementerat grundläggande funktionalitet med mockdata, försök integrera med ett externt API (t.ex. TheMealDB eller Edamam) för att hämta och visa receptdata
+Använda State och Props i React: Utnyttja useState och props för att hantera applikationens tillstånd och datamanipulation.
+Formulärhantering: Använd formulärkomponenter i React för att hantera användarinmatning. Validera inmatning och visa felmeddelanden om något fält saknas.
+Betygssättning och Eventhantering: Implementera en funktion där användare kan betygsätta recept (t.ex. genom att öka en siffra vid knapptryckning) och hantera detta med Reacts eventhantering.
+Bildhantering: Varje recept ska ha en unik bild, och ni ska säkerställa att bilder hanteras korrekt i React.
+Redigera och Radera Recept: Använd CRUD-operationer för att tillåta redigering och radering av recept.
+Använda Github: Samarbete i team genom att använda Git och GitHub för versionshantering.
+Rapport: En rapport som sammanfattar veckans arbete och era lärdomar.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Extra:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Sökfunktionalitet: Implementera en sökfunktion för recept.
+Användarautentisering: Lägg till registrering och inloggning för användare.
+Kategorisering av recept: Tillåt användare att kategorisera sina recept.
+React: Förståelse och implementering hooks (useState, useEffect).
 
-### `npm test`
+Veckans ämnen ni ska visa för läraren att ni har kunskap/färdighet i:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+CRUD-operationer och Fetch API: Implementering av CRUD-operationer med Fetch API för att hantera receptdata både från mockdata och från externa API
+JSON-hantering: Förståelse för JSON-strukturer och deras användning i React.
+Eventhantering och DOM-manipulation: Implementera händelsehantering i React och visa att ni kan manipulera DOM på rätt sätt.
+Grundläggande JavaScript: Användning av grundläggande JavaScript-kunskaper som variabler, loopar och datatyper i en React-applikation.

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import mockRecipes from "../mockData/recipes.json";
 
-const MockDataCrud = () => {
+const MockDataCrud = ({ showForm, toggleForm }) => {
   const [recipes, setRecipes] = useState([]);
   const [newRecipe, setNewRecipe] = useState("");
 
@@ -15,13 +15,13 @@ const MockDataCrud = () => {
   const createRecipe = () => {};
 
   return (
-    <div className="bg-purple-50 px-4 py-6 flex flex-col">
+    <div className="bg-purple-50 px-4 py-6 flex flex-col justify-center items-center">
       <h2 className="font-semibold text-center text-[24px] mb-4">
         Fetched Mock Recipe List
       </h2>
       <div className="flex mx-auto">
-      <ul className="flex flex-wrap flew-row justify-around gap-4">
-      {recipes.length > 0 ? (
+        <ul className="flex flex-wrap flew-row justify-around gap-4">
+          {recipes.length > 0 ? (
             recipes.map((recipe, index) => (
               <div
                 key={index}
@@ -64,6 +64,12 @@ const MockDataCrud = () => {
           )}
         </ul>
       </div>
+      <button
+        className="addRecipeForm text-3xl bg-green-400 w-50 rounded-lg p-2 m-3"
+        onClick={toggleForm}
+      >
+        {showForm ? "Close form" : "Add recipe"}
+      </button>
     </div>
   );
 };

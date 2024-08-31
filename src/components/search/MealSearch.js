@@ -16,6 +16,11 @@ const MealSearch = () => {
     setIsOpen(false);
   };
 
+  //create - handle add new category
+  const handleAddCategory = (newCategory) => {
+    setCategories((prevCategories) => [...prevCategories, newCategory]); //spread op - add the category to the current category list
+  };
+
   //read - fetch meal categories
   useEffect(() => {
     async function getMeals() {
@@ -78,7 +83,10 @@ const MealSearch = () => {
             Add new category
           </button>
         ) : (
-          <CategoryForm closeForm={closeCreateCategoryForm} />
+          <CategoryForm
+            closeForm={closeCreateCategoryForm}
+            addCatetegory={handleAddCategory}
+          />
         )}
       </div>
       <div className="">
@@ -88,14 +96,14 @@ const MealSearch = () => {
               {categories.map((meal) => (
                 <div
                   key={meal.idCategory}
-                  className={`bg-white max-w-[500px] h-fit my-6 px-6 py-4 flex flex-col shadow-md justify-between relative ${
+                  className={`bg-white min-w-[260px] w-full max-w-[500px]  my-6 px-6 py-8 flex flex-col shadow-md justify-between relative ${
                     editingId === meal.idCategory
                       ? "border border-black w-full"
                       : ""
                   }`}
                 >
                   <li className="flex flex-col gap-6">
-                    <h4 className="text-[20px] font-semibold">
+                    <h4 className="text-[24px] font-semibold">
                       {meal.strCategory}
                     </h4>
                     <div className="absolute font-semibold text-[18px] right-4 top-4">
@@ -180,19 +188,53 @@ const MealSearch = () => {
 };
 
 //form for adding category
-const CategoryForm = ({ closeForm }) => {
-  //create - not done!
-  const saveCategory = () => {
-    console.log("Save category");
+const CategoryForm = ({ closeForm, addCatetegory }) => {
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryDescription, setCategoryDescription] = useState("");
+  const [categoryImg, setCategoryImg] = useState("");
+
+  const [newError, setNewError] = useState("");
+
+  //to upload img -
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCategoryImg(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  //create
+  const saveCategory = (e) => {
+    e.preventDefault();
+    //console.log("Save category");
+
+    if (categoryName && categoryDescription) {
+      //img not required
+      const newCategory = {
+        idCategory: Date.now().toString(),
+        strCategory: categoryName,
+        strCategoryDescription: categoryDescription,
+        strCategoryThumb: categoryImg,
+      };
+
+      addCatetegory(newCategory); //add the new category to the end of the list
+      closeForm(); //close form when saved
+    } else {
+      setNewError("Something went wrong, fill in all the fields correctly!");
+    }
   };
 
   return (
-    <div className="bg-white px-4 py-8 max-w-[500px] shadow-md relative">
-      <div className="absolute right-2 top-2 font-semibold text-[18px]">
+    <div className="bg-white px-10 py-8 max-w-[500px] shadow-md relative">
+      <div className="absolute right-4 top-4 font-semibold text-[18px]">
         <button onClick={closeForm}>X</button>
       </div>
-      <h2 className="font-semibold text-[24px] mb-4">Create new category</h2>
-      <form className="flex flex-col gap-4">
+      <h2 className="font-semibold text-[24px] mb-6">Create a new category</h2>
+      <form className="flex flex-col gap-6" onSubmit={saveCategory}>
         <div className="flex flex-col">
           <label htmlFor="category" className="font-semibold">
             Write category name:
@@ -202,6 +244,8 @@ const CategoryForm = ({ closeForm }) => {
             placeholder="Category"
             id="category"
             className="px-2 py-1 border border-gray-500 "
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
           />
         </div>
         <div className="flex flex-col">
@@ -210,6 +254,7 @@ const CategoryForm = ({ closeForm }) => {
             type="file"
             accept="image/jpeg, image/png, image/jpg"
             id="mealImg"
+            onChange={handleImageChange}
           />
         </div>
         <div className="flex flex-col">
@@ -220,11 +265,13 @@ const CategoryForm = ({ closeForm }) => {
             id="description"
             className="px-2 py-1 border border-gray-500 h-[100px]"
             placeholder="Description"
+            value={categoryDescription}
+            onChange={(e) => setCategoryDescription(e.target.value)}
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <button
-            onClick={() => saveCategory()}
+            type="submit"
             className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-green-600 text-white hover:bg-green-600"
           >
             Add new category
@@ -236,6 +283,7 @@ const CategoryForm = ({ closeForm }) => {
             Close form
           </button>
         </div>
+        <div>{newError && <p className="text-red-600">{newError}</p>}</div>
       </form>
     </div>
   );

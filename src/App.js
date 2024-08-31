@@ -17,14 +17,14 @@ function App() {
     <>
       <Nav />
       <GetRecipes />
+      <div className="border-t border-gray-600 ">
+
       <MockDataCrud showForm={showForm} toggleForm={toggleForm} />
       <div className="flex flex-col justify-center w-full">
-        {/* <h3 className="font-semibold text-center text-[24px] my-4">
-          Add new recipe:{" "}
-        </h3> */}
         {showForm && <CreateRecipeForm />}
       </div>
-      <div>
+      </div>
+      <div className="border-t border-gray-600 ">
         <MealSearch />
       </div>
     </>

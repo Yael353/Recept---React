@@ -36,7 +36,7 @@ function RecipeForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const formObj = { recipeName, description, ingredients, stepsList, image };
+    let formObj = { recipeName, description, ingredients, stepsList, image };
     console.log({
       recipeName,
       description,

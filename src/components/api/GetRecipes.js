@@ -34,6 +34,11 @@ export default function GetRecipes() {
     fetchRecipes();
   }, []);
 
+  const deleteRecipe = (id) => {
+    setRecipes(recipes.filter((book) => book.id !== id));
+    console.log(recipes.length);
+  };
+
   //JSX code
   if (recipes) {
     return (
@@ -58,6 +63,7 @@ export default function GetRecipes() {
                   borderRadius: 5,
                   color: "grey",
                 }}
+                onClick={() => deleteRecipe(recipe.id)}
               >
                 Delete Btn
               </button>

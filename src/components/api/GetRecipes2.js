@@ -1,19 +1,41 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-//Component Get and Show recipes from API (Express)
+//NOTE: This Component works with an localhost API(Express) with GET/DELETE Operations
 export default function GetRecipes2() {
   const [recipes, setRecipes] = useState(null);
-  /* useEffect(() => {
-    const fetchRecipes = () => {
-      setRecipes(RECIPES_MOCK.recipes);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    //GET FUNCTION
+    const fetchRecipes = async () => {
+      let data = null;
+      try {
+        const res = await fetch("http://localhost:4000/");
+        data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error Fetch Data", error);
+      } finally {
+        setRecipes(data);
+      }
     };
     fetchRecipes();
   }, []);
- */
-  const deleteRecipe = (id) => {
-    setRecipes(recipes.filter((book) => book.id !== id));
-    console.log(recipes.length);
+
+  //DELETE FUNCTION
+  const handleDelete = async (id, title) => {
+    try {
+      const res = await fetch(`http://localhost:4000/recipes/${id}`, {
+        method: "DELETE",
+      });
+      console.log(res);
+      setRecipes(recipes.filter((r) => r.id !== id));
+      setMessage(`${title}, with id:${id}, have been deleted. :)`);
+    } catch (error) {
+      setMessage(`ERROR: ${title}, with id:${id} was not deleted!`);
+      console.error("Error deleting post:", error);
+    }
   };
 
   //JSX code
@@ -21,6 +43,8 @@ export default function GetRecipes2() {
     return (
       <div style={{ display: "flex", flexDirection: "column" }}>
         <h1 style={{ textAlign: "center" }}>Recipes List</h1>
+        <p> 🗣️ {message} </p>
+        <br></br>
         <ul
           style={{
             display: "flex",
@@ -37,9 +61,9 @@ export default function GetRecipes2() {
                   background: "red",
                   marginLeft: 100,
                   borderRadius: 5,
-                  color: "grey",
+                  color: "white",
                 }}
-                onClick={() => deleteRecipe(recipe.id)}
+                onClick={() => handleDelete(recipe.id, recipe.title)}
               >
                 Delete Btn
               </button>
@@ -52,7 +76,7 @@ export default function GetRecipes2() {
   } else
     return (
       <div>
-        <h1>RECIPES NOT FOUND</h1>
+        <h1>🗣️ FAIL: RECIPE LIST NOT FOUND</h1>
       </div>
     );
 }

@@ -37,18 +37,10 @@ function RecipeForm() {
     e.preventDefault();
 
     let formObj = { recipeName, description, ingredients, stepsList, image };
-    console.log({
-      recipeName,
-      description,
-      ingredients,
-      stepsList,
-      image,
-    });
+
     console.log("formObj: ", formObj);
 
     formObj = {};
-
-    console.log("formObj", formObj);
   };
 
   return (

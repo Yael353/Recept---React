@@ -76,7 +76,7 @@ export default function GetRecipes2() {
   } else
     return (
       <div>
-        <h1>🗣️ FAIL: RECIPE LIST NOT FOUND</h1>
+        <h1>🗣️ FAIL: RECIPE LIST NOT FOUND. Please RUN the API SERVER</h1>
       </div>
     );
 }

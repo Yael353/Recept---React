@@ -88,7 +88,7 @@ const MealSearch = () => {
         : meal
     );
     setCategories(updateCategories);
-    setEditingId(null); //
+    setEditingId(null); //remove editing mode on id
     setFilteredCategories(updateCategories);
   };
 
@@ -97,7 +97,7 @@ const MealSearch = () => {
     setEditingId(null);
   };
 
-  //rating
+  //rating - update stars
   const handleRating = (id, newRate) => {
     setNewRate((prevRate) => ({
       ...prevRate,

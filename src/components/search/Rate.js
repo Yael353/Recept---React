@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { FaRegStar } from "react-icons/fa";
 
 const RateRecipe = ({ addRate }) => {
-  const [stars, setStars] = useState(1);
+  const [stars, setStars] = useState(1); //current value of stars - 1
 
   const addStars = () => {
-    addRate(Number(stars));
-    setStars(1);
+    addRate(Number(stars)); //call addRate func, adds current nr of stars to rating
+    setStars(1); //reset stars
   };
 
   return (

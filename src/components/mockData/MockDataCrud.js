@@ -10,9 +10,11 @@ const MockDataCrud = ({ showForm, toggleForm }) => {
     setRecipes(mockRecipes.recipes);
   }, []);
 
-  //console.log("rec", recipes)
-
-  const createRecipe = () => {};
+  // Handle deleting a recipe
+  const handleDelete = (id) => {
+    const updatedRecipes = recipes.filter((recipe) => recipe.id !== id);
+    setRecipes(updatedRecipes);
+  };
 
   return (
     <div className="bg-purple-50 px-4 py-6 flex flex-col justify-center items-center">
@@ -52,7 +54,10 @@ const MockDataCrud = ({ showForm, toggleForm }) => {
                     <button className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-gray-400 text-white hover:bg-gray-600">
                       Edit
                     </button>
-                    <button className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-red-400 text-white hover:bg-red-600">
+                    <button
+                      className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-red-400 text-white hover:bg-red-600"
+                      onClick={() => handleDelete(recipe.id)}
+                    >
                       Delete
                     </button>
                   </div>

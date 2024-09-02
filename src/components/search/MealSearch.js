@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
+import RateRecipe from "./Rate";
+import { FaRegStar } from "react-icons/fa";
+import SearchBar from "./SearchBar"; //komponenten searchbar
 
 const MealSearch = () => {
-  const [categories, setCategories] = useState([]);
-  const [editingId, setEditingId] = useState(null);
+  //states
+  const [categories, setCategories] = useState([]); //state - empty array to put the fetched categories
+  //for edeting
+  const [editingId, setEditingId] = useState(null); //id for edeting, null from start 
   const [newDescription, setNewDescription] = useState("");
-
+  const [newCategoryTitle, setNewCategoryTitle] = useState("");
+  //filtrerar category
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  //handle open/close create category
   const [isOpen, setIsOpen] = useState(false);
+  //new rate
+  const [newRate, setNewRate] = useState({});
+
 
   //open create category form
   const openCreateCategoryForm = () => {
@@ -19,9 +30,10 @@ const MealSearch = () => {
   //create - handle add new category
   const handleAddCategory = (newCategory) => {
     setCategories((prevCategories) => [...prevCategories, newCategory]); //spread op - add the category to the current category list
+    setFilteredCategories((prevCategories) => [...prevCategories, newCategory]);
   };
 
-  //read - fetch meal categories
+  // - fetch meal categories - from the meal db
   useEffect(() => {
     async function getMeals() {
       try {
@@ -31,6 +43,7 @@ const MealSearch = () => {
         const result = await response.json();
         //console.log("res", result);
         setCategories(result.categories.slice(0, 4));
+        setFilteredCategories(result.categories.slice(0, 4)); // Initialize filtered categories
       } catch (err) {
         console.error("Error fetching meals!", err);
       }
@@ -38,30 +51,45 @@ const MealSearch = () => {
     getMeals();
   }, []);
 
-  //delete meal by id
+  //funktion för att kunna hantera och hitta ett recept efter kategorin
+  const handleSearch = (query) => {
+    if (query === "") {
+      setFilteredCategories(categories);
+    } else {
+      const filtered = categories.filter((category) =>
+        (category.strCategory || "").toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredCategories(filtered);
+    }
+  };
+
+  //delete meal category by id
   const deleteMeal = (id) => {
     const deleteCategories = categories.filter(
       (meal) => meal.idCategory !== id
     );
     setCategories(deleteCategories);
+    setFilteredCategories(deleteCategories);
   };
 
-  //update
+  //update meal category
   const updateMeal = (id) => {
     const updateCategories = categories.find((meal) => meal.idCategory === id);
     setEditingId(id);
     setNewDescription(updateCategories.strCategoryDescription);
+    setNewCategoryTitle(updateCategories.strCategory);
   };
 
-  //save the edited description
+  //save the edited description/title(category)
   const saveUpdatedDescription = (id) => {
     const updateCategories = categories.map((meal) =>
       meal.idCategory === id
-        ? { ...meal, strCategoryDescription: newDescription }
+        ? { ...meal, strCategoryDescription: newDescription, strCategory: newCategoryTitle }
         : meal
     );
     setCategories(updateCategories);
-    setEditingId(null);
+    setEditingId(null); //
+    setFilteredCategories(updateCategories);
   };
 
   //close edit description
@@ -69,11 +97,22 @@ const MealSearch = () => {
     setEditingId(null);
   };
 
+  //rating
+  const handleRating = (id, newRate) => {
+    setNewRate((prevRate) => ({
+      ...prevRate,
+      [id]: (prevRate[id] || 0) + newRate,
+    }));
+  };
+
   return (
     <div className="bg-purple-50 px-4 py-6 flex w-full flex-col">
       <h3 className="font-semibold text-[24px] mb-4 text-center">
         Meal By Category - API
       </h3>
+      <div className="flex mx-auto mb-4">
+        <SearchBar onSearch={handleSearch} />
+      </div>
       <div className="flex mx-auto">
         {!isOpen ? (
           <button
@@ -90,10 +129,10 @@ const MealSearch = () => {
         )}
       </div>
       <div className="">
-        {categories.length > 0 ? (
+        {filteredCategories.length > 0 ? (
           <div className="">
             <ul className="flex flex-wrap flew-row justify-around gap-4">
-              {categories.map((meal) => (
+              {filteredCategories.map((meal) => (
                 <div
                   key={meal.idCategory}
                   className={`bg-white min-w-[260px] w-full max-w-[500px]  my-6 px-6 py-8 flex flex-col shadow-md justify-between relative ${
@@ -103,27 +142,54 @@ const MealSearch = () => {
                   }`}
                 >
                   <li className="flex flex-col gap-6">
-                    <h4 className="text-[24px] font-semibold">
-                      {meal.strCategory}
-                    </h4>
+                    <div className="flex flex-row items-center gap-1 absolute top-4 left-4">
+                      <p>
+                        Rating: {newRate[meal.idCategory] || 0}
+                        {/*newRate === 1 ? "star" : "stars"*/}
+                      </p>
+                      <FaRegStar color="gray" />
+                    </div>
+                    {editingId === meal.idCategory ? (
+                      <div className="mt-4">
+                        <h3 className="font-semibold text-[18px]">
+                          Edit Category:{" "}
+                        </h3>
+                        <input
+                          className="border border-gray-300 p-2 w-fit"
+                          type="text"
+                          value={newCategoryTitle}
+                          onChange={(e) => setNewCategoryTitle(e.target.value)}
+                        />
+                      </div>
+                    ) : (
+                      <h4 className="text-[24px] font-semibold mt-3">
+                        {meal.strCategory}
+                      </h4>
+                    )}
                     <div className="absolute font-semibold text-[18px] right-4 top-4">
                       <button onClick={() => deleteMeal(meal.idCategory)}>
                         X
                       </button>
                     </div>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center max-w-[500px] pb-4 relative">
                       <img
                         className="max-w-[400px]"
                         src={meal.strCategoryThumb}
                         alt={meal.strCategory}
                       />
+                      <div className="absolute bottom-[-28px] right-0">
+                        <RateRecipe
+                          addRate={(newRate) =>
+                            handleRating(meal.idCategory, newRate)
+                          }
+                        />
+                      </div>
                     </div>
                     {editingId === meal.idCategory ? (
-                      <div>
+                      <div className="">
                         <h3 className="font-semibold text-[18px]">
                           Edit Description:{" "}
                         </h3>
-
                         <textarea
                           value={newDescription}
                           onChange={(e) => setNewDescription(e.target.value)}
@@ -132,7 +198,7 @@ const MealSearch = () => {
                       </div>
                     ) : (
                       <div>
-                        <h3 className="font-semibold text-[18px]">
+                        <h3 className="font-semibold text-[18px] pt-4">
                           Description:{" "}
                         </h3>
 

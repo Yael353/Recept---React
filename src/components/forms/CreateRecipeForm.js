@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FormCard from "./FormCard";
 
 function RecipeForm() {
   const [recipeName, setRecipeName] = useState("");
@@ -10,6 +11,7 @@ function RecipeForm() {
   const [image, setImage] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [stepsList, setStepsList] = useState([]);
+  const [formObj, setFormObj] = useState(null);
 
   const handleAddIngredient = (e) => {
     e.preventDefault();
@@ -36,23 +38,25 @@ function RecipeForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let formObj = { recipeName, description, ingredients, stepsList, image };
-    console.log({
+    let newFormObj = {
       recipeName,
       description,
       ingredients,
       stepsList,
       image,
-    });
-    console.log("formObj: ", formObj);
+    };
 
-    formObj = {};
+    setFormObj(newFormObj);
 
-    console.log("formObj", formObj);
+    setRecipeName("");
+    setDescription("");
+    setIngredients([]);
+    setStepsList([]);
+    setImage(null);
   };
 
   return (
-    <div className="bg-pink-50 min-h-screen flex justify-center items-center">
+    <div className="bg-pink-50 min-h-screen flex flex-col justify-center items-center">
       <form
         className="recForm flex flex-col bg-white m-10 p-10 rounded-lg shadow-lg w-full max-w-3xl"
         onSubmit={handleSubmit}
@@ -239,15 +243,6 @@ function RecipeForm() {
 
         <div id="addRecipe">
           <button
-            onSubmit={(e) =>
-              handleSubmit(e, {
-                recipeName,
-                description,
-                ingredients,
-                stepsList,
-                image,
-              })
-            }
             type="submit"
             id="addRecipeBtn"
             className="bg-green-500 text-white font-medium rounded-lg w-full py-3 hover:bg-green-600 transition"
@@ -256,6 +251,9 @@ function RecipeForm() {
           </button>
         </div>
       </form>
+      <div className="w-full max-w-3xl mt-8">
+        {formObj && <FormCard formObj={formObj} />}
+      </div>
     </div>
   );
 }

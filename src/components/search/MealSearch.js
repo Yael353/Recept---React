@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import RateRecipe from "./Rate";
 import { FaRegStar } from "react-icons/fa";
+import SearchBar from "./SearchBar"; //komponenten searchbar
 
 const MealSearch = () => {
   const [categories, setCategories] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newDescription, setNewDescription] = useState("");
   const [newCategoryTitle, setNewCategoryTitle] = useState("");
+  //filtrerar kategory
+  const [filteredCategories, setFilteredCategories] = useState([]);
+
 
   const [isOpen, setIsOpen] = useState(false);
   const [newRate, setNewRate] = useState({});
@@ -23,6 +27,7 @@ const MealSearch = () => {
   //create - handle add new category
   const handleAddCategory = (newCategory) => {
     setCategories((prevCategories) => [...prevCategories, newCategory]); //spread op - add the category to the current category list
+    setFilteredCategories((prevCategories) => [...prevCategories, newCategory]);
   };
 
   //read - fetch meal categories
@@ -35,6 +40,7 @@ const MealSearch = () => {
         const result = await response.json();
         //console.log("res", result);
         setCategories(result.categories.slice(0, 4));
+        setFilteredCategories(result.categories.slice(0, 4)); // Initialize filtered categories
       } catch (err) {
         console.error("Error fetching meals!", err);
       }
@@ -42,12 +48,25 @@ const MealSearch = () => {
     getMeals();
   }, []);
 
+  //funktion för att kunna hantera och hitta ett recept efter kategorin
+  const handleSearch = (query) => {
+    if (query === "") {
+      setFilteredCategories(categories);
+    } else {
+      const filtered = categories.filter((category) =>
+        (category.strCategory || "").toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredCategories(filtered);
+    }
+  };
+
   //delete meal by id
   const deleteMeal = (id) => {
     const deleteCategories = categories.filter(
       (meal) => meal.idCategory !== id
     );
     setCategories(deleteCategories);
+    setFilteredCategories(deleteCategories);
   };
 
   //update
@@ -67,6 +86,7 @@ const MealSearch = () => {
     );
     setCategories(updateCategories);
     setEditingId(null);
+    setFilteredCategories(updateCategories);
   };
 
   //close edit description
@@ -87,6 +107,9 @@ const MealSearch = () => {
       <h3 className="font-semibold text-[24px] mb-4 text-center">
         Meal By Category - API
       </h3>
+      <div className="flex mx-auto mb-4">
+        <SearchBar onSearch={handleSearch} />
+      </div>
       <div className="flex mx-auto">
         {!isOpen ? (
           <button
@@ -103,10 +126,10 @@ const MealSearch = () => {
         )}
       </div>
       <div className="">
-        {categories.length > 0 ? (
+        {filteredCategories.length > 0 ? (
           <div className="">
             <ul className="flex flex-wrap flew-row justify-around gap-4">
-              {categories.map((meal) => (
+              {filteredCategories.map((meal) => (
                 <div
                   key={meal.idCategory}
                   className={`bg-white min-w-[260px] w-full max-w-[500px]  my-6 px-6 py-8 flex flex-col shadow-md justify-between relative ${

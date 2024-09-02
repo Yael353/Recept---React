@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 //NOTE: This Component works with an localhost API(Express) with GET/DELETE Operations
 export default function GetRecipes2() {
   const [recipes, setRecipes] = useState(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("Loaded");
 
   useEffect(() => {
     //GET FUNCTION
@@ -56,6 +56,7 @@ export default function GetRecipes2() {
           {recipes.map((recipe) => (
             <li key={recipe.id}>
               <h3>Title: {recipe.title}</h3>
+              <p>Cocking Time : {recipe.cocking_time}</p>
               <button
                 style={{
                   background: "red",

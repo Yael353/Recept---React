@@ -4,16 +4,19 @@ import { FaRegStar } from "react-icons/fa";
 import SearchBar from "./SearchBar"; //komponenten searchbar
 
 const MealSearch = () => {
-  const [categories, setCategories] = useState([]);
-  const [editingId, setEditingId] = useState(null);
+  //states
+  const [categories, setCategories] = useState([]); //state - empty array to put the fetched categories
+  //for edeting
+  const [editingId, setEditingId] = useState(null); //id for edeting, null from start 
   const [newDescription, setNewDescription] = useState("");
   const [newCategoryTitle, setNewCategoryTitle] = useState("");
-  //filtrerar kategory
+  //filtrerar category
   const [filteredCategories, setFilteredCategories] = useState([]);
-
-
+  //handle open/close create category
   const [isOpen, setIsOpen] = useState(false);
+  //new rate
   const [newRate, setNewRate] = useState({});
+
 
   //open create category form
   const openCreateCategoryForm = () => {
@@ -30,7 +33,7 @@ const MealSearch = () => {
     setFilteredCategories((prevCategories) => [...prevCategories, newCategory]);
   };
 
-  //read - fetch meal categories
+  // - fetch meal categories - from the meal db
   useEffect(() => {
     async function getMeals() {
       try {
@@ -60,7 +63,7 @@ const MealSearch = () => {
     }
   };
 
-  //delete meal by id
+  //delete meal category by id
   const deleteMeal = (id) => {
     const deleteCategories = categories.filter(
       (meal) => meal.idCategory !== id
@@ -69,7 +72,7 @@ const MealSearch = () => {
     setFilteredCategories(deleteCategories);
   };
 
-  //update
+  //update meal category
   const updateMeal = (id) => {
     const updateCategories = categories.find((meal) => meal.idCategory === id);
     setEditingId(id);
@@ -77,7 +80,7 @@ const MealSearch = () => {
     setNewCategoryTitle(updateCategories.strCategory);
   };
 
-  //save the edited description
+  //save the edited description/title(category)
   const saveUpdatedDescription = (id) => {
     const updateCategories = categories.map((meal) =>
       meal.idCategory === id
@@ -85,7 +88,7 @@ const MealSearch = () => {
         : meal
     );
     setCategories(updateCategories);
-    setEditingId(null);
+    setEditingId(null); //
     setFilteredCategories(updateCategories);
   };
 

@@ -7,7 +7,7 @@ const MealSearch = () => {
   //states
   const [categories, setCategories] = useState([]); //state - empty array to put the fetched categories
   //for edeting
-  const [editingId, setEditingId] = useState(null); //id for edeting, null from start 
+  const [editingId, setEditingId] = useState(null); //id for edeting, null from start
   const [newDescription, setNewDescription] = useState("");
   const [newCategoryTitle, setNewCategoryTitle] = useState("");
   //filtrerar category
@@ -16,7 +16,6 @@ const MealSearch = () => {
   const [isOpen, setIsOpen] = useState(false);
   //new rate
   const [newRate, setNewRate] = useState({});
-
 
   //open create category form
   const openCreateCategoryForm = () => {
@@ -84,7 +83,11 @@ const MealSearch = () => {
   const saveUpdatedDescription = (id) => {
     const updateCategories = categories.map((meal) =>
       meal.idCategory === id
-        ? { ...meal, strCategoryDescription: newDescription, strCategory: newCategoryTitle }
+        ? {
+            ...meal,
+            strCategoryDescription: newDescription,
+            strCategory: newCategoryTitle,
+          }
         : meal
     );
     setCategories(updateCategories);

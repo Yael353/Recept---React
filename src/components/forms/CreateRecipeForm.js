@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import FormCard from "./FormCard";
 
-function RecipeForm() {
+function RecipeForm({ formObj }) {
   const [recipeName, setRecipeName] = useState("");
   const [description, setDescription] = useState("");
   const [ingredient, setIngredient] = useState("");
@@ -11,7 +11,7 @@ function RecipeForm() {
   const [image, setImage] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [stepsList, setStepsList] = useState([]);
-  const [formObj, setFormObj] = useState(null);
+  //const [formObj, setFormObj] = useState(null);
 
   const handleAddIngredient = (e) => {
     e.preventDefault();
@@ -46,7 +46,10 @@ function RecipeForm() {
       image,
     };
 
-    setFormObj(newFormObj);
+    console.log("new form obj in crete recipeform", newFormObj);
+
+    formObj(newFormObj);
+    console.log("new form obj 2 in crete recipeform", newFormObj);
 
     setRecipeName("");
     setDescription("");

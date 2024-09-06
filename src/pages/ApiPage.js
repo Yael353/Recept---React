@@ -1,9 +1,10 @@
 import React from "react";
+import MealSearch from "../components/search/MealSearch";
 
 function ApiPage() {
   return (
-    <div id="ApiPage" className="bg-green-200 h-[100vh]">
-      <h2 className="bg-red-100">This is the page for Api data</h2>
+    <div className="border-t border-gray-600 ">
+      <MealSearch />
     </div>
   );
 }

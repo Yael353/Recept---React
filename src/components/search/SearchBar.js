@@ -15,10 +15,10 @@ const SearchBar = ({ onSearch }) => {
     <div className='search-bar w-[350px]'>
         <input
             type='text'
-            placeholder='sök efter kategorin...'
+            placeholder='Search category'
             value={query}
             onChange={handleChange}
-            className='border p-2 rounded-md w-full max-w-md outline-none'
+            className='border p-2 rounded-md w-full max-w-md outline-purple-200'
         />
     </div>
   )

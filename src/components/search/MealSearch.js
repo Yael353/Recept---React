@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RateRecipe from "./Rate";
-import { FaRegStar } from "react-icons/fa";
+import { FaHeart, FaRegStar } from "react-icons/fa";
 import SearchBar from "./SearchBar"; //komponenten searchbar
 
 const MealSearch = () => {
@@ -16,6 +16,8 @@ const MealSearch = () => {
   const [isOpen, setIsOpen] = useState(false);
   //new rate
   const [newRate, setNewRate] = useState({});
+  //save to userPage/favourite
+  const [fav, setFav] = useState([]);
 
   //open create category form
   const openCreateCategoryForm = () => {
@@ -108,149 +110,202 @@ const MealSearch = () => {
     }));
   };
 
-  return (
-    <div className="bg-purple-50 px-4 py-6 flex w-full flex-col">
-      <h3 className="font-semibold text-[24px] mb-4 text-center">
-        Meal By Category - API
-      </h3>
-      <div className="flex mx-auto mb-4">
-        <SearchBar onSearch={handleSearch} />
-      </div>
-      <div className="flex mx-auto">
-        {!isOpen ? (
-          <button
-            onClick={openCreateCategoryForm}
-            className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-green-600 text-white hover:bg-green-600"
-          >
-            Add new category
-          </button>
-        ) : (
-          <CategoryForm
-            closeForm={closeCreateCategoryForm}
-            addCatetegory={handleAddCategory}
-          />
-        )}
-      </div>
-      <div className="">
-        {filteredCategories.length > 0 ? (
-          <div className="">
-            <ul className="flex flex-wrap flew-row justify-around gap-4">
-              {filteredCategories.map((meal) => (
-                <div
-                  key={meal.idCategory}
-                  className={`bg-white min-w-[260px] w-full max-w-[500px]  my-6 px-6 py-8 flex flex-col shadow-md justify-between relative ${
-                    editingId === meal.idCategory
-                      ? "border border-black w-full"
-                      : ""
-                  }`}
-                >
-                  <li className="flex flex-col gap-6">
-                    <div className="flex flex-row items-center gap-1 absolute top-4 left-4">
-                      <p>
-                        Rating: {newRate[meal.idCategory] || 0}
-                        {/*newRate === 1 ? "star" : "stars"*/}
-                      </p>
-                      <FaRegStar color="gray" />
-                    </div>
-                    {editingId === meal.idCategory ? (
-                      <div className="mt-4">
-                        <h3 className="font-semibold text-[18px]">
-                          Edit Category:{" "}
-                        </h3>
-                        <input
-                          className="border border-gray-300 p-2 w-fit"
-                          type="text"
-                          value={newCategoryTitle}
-                          onChange={(e) => setNewCategoryTitle(e.target.value)}
-                        />
-                      </div>
-                    ) : (
-                      <h4 className="text-[24px] font-semibold mt-3">
-                        {meal.strCategory}
-                      </h4>
-                    )}
-                    <div className="absolute font-semibold text-[18px] right-4 top-4">
-                      <button onClick={() => deleteMeal(meal.idCategory)}>
-                        X
-                      </button>
-                    </div>
-                    <div className="flex justify-center max-w-[500px] pb-4 relative">
-                      <img
-                        className="max-w-[400px]"
-                        src={meal.strCategoryThumb}
-                        alt={meal.strCategory}
-                      />
-                      <div className="absolute bottom-[-28px] right-0">
-                        <RateRecipe
-                          addRate={(newRate) =>
-                            handleRating(meal.idCategory, newRate)
-                          }
-                        />
-                      </div>
-                    </div>
-                    {editingId === meal.idCategory ? (
-                      <div className="">
-                        <h3 className="font-semibold text-[18px]">
-                          Edit Description:{" "}
-                        </h3>
-                        <textarea
-                          value={newDescription}
-                          onChange={(e) => setNewDescription(e.target.value)}
-                          className="border border-gray-300 p-2 w-full h-[150px]"
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <h3 className="font-semibold text-[18px] pt-4">
-                          Description:{" "}
-                        </h3>
+  // Save to favorites
+  const handleAddFav = (meal) => {
+    // Get the current user (assumed to be saved in localStorage)
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+  
+    // If user exists, get the username (or use userId if available)
+    const username = user ? user.username : null;
+  
+    if (!username) {
+      console.log("User not logged in.");
+      return; // Exit if no user is logged in
+    }
+  
+    // Get the current favorites for this user (or an empty array if not found)
+    const userFavs = JSON.parse(localStorage.getItem(`favorites_${username}`)) || [];
+  
+    // Check if the meal is already in the user's favorites
+    const existingFav = userFavs.find((favMeal) => favMeal.idCategory === meal.idCategory);
+  
+    let updatedFavs;
+  
+    if (existingFav) {
+      // Remove the meal if it's already in favorites
+      updatedFavs = userFavs.filter((favMeal) => favMeal.idCategory !== meal.idCategory);
+    } else {
+      // Add the meal to favorites
+      updatedFavs = [...userFavs, meal];
+    }
+  
+    // Save the updated favorites back to localStorage under the specific user key
+    localStorage.setItem(`favorites_${username}`, JSON.stringify(updatedFavs));
+  
+    // Optionally, set the favorites state if needed (e.g., to trigger UI updates)
+    setFav(updatedFavs);
+  };
 
-                        <p className="">{meal.strCategoryDescription}</p>
+  return (
+    <div className="h-full bg-purple-50">
+      <div className="px-4 py-6 flex w-full h-full flex-col">
+        <h3 className="font-semibold text-[24px] mb-4 text-center">
+          Meal By Category - API
+        </h3>
+        <div className="flex mx-auto mb-4">
+          <SearchBar onSearch={handleSearch} />
+        </div>
+        <div className="flex mx-auto">
+          {!isOpen ? (
+            <button
+              onClick={openCreateCategoryForm}
+              className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-green-600 text-white hover:bg-green-600"
+            >
+              Add new category
+            </button>
+          ) : (
+            <CategoryForm
+              closeForm={closeCreateCategoryForm}
+              addCatetegory={handleAddCategory}
+            />
+          )}
+        </div>
+        <div className="">
+          {filteredCategories.length > 0 ? (
+            <div className="">
+              <ul className="flex flex-wrap flew-row justify-around gap-4">
+                {filteredCategories.map((meal) => (
+                  <div
+                    key={meal.idCategory}
+                    className={`bg-white min-w-[260px] w-full max-w-[500px]  my-6 px-6 py-8 flex flex-col shadow-md justify-between relative ${
+                      editingId === meal.idCategory
+                        ? "border border-black w-full"
+                        : ""
+                    }`}
+                  >
+                    <li className="flex flex-col gap-6">
+                      <div className="flex flex-row items-center gap-1 absolute top-4 left-4">
+                        <p>
+                          Rating: {newRate[meal.idCategory] || 0}
+                          {/*newRate === 1 ? "star" : "stars"*/}
+                        </p>
+                        <FaRegStar color="gray" />
                       </div>
-                    )}
-                    {editingId === meal.idCategory ? (
-                      <div className="flex gap-4 justify-end">
-                        <button
-                          onClick={() =>
-                            saveUpdatedDescription(meal.idCategory)
-                          }
-                          className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-green-400 text-white hover:bg-green-600"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={closeEditForm}
-                          className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-red-400 text-white hover:bg-red-600"
-                        >
-                          Close
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="flex gap-4 justify-end">
-                        <button
-                          onClick={() => updateMeal(meal.idCategory)}
-                          className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-gray-400 text-white hover:bg-gray-600"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => deleteMeal(meal.idCategory)}
-                          className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-red-400 text-white hover:bg-red-600"
-                        >
-                          Delete
+                      {editingId === meal.idCategory ? (
+                        <div className="mt-4">
+                          <h3 className="font-semibold text-[18px]">
+                            Edit Category:{" "}
+                          </h3>
+                          <input
+                            className="border border-gray-300 p-2 w-fit"
+                            type="text"
+                            value={newCategoryTitle}
+                            onChange={(e) =>
+                              setNewCategoryTitle(e.target.value)
+                            }
+                          />
+                        </div>
+                      ) : (
+                        <h4 className="text-[24px] font-semibold mt-3">
+                          {meal.strCategory}
+                        </h4>
+                      )}
+                      <div className="absolute font-semibold text-[18px] right-4 top-4">
+                        <button onClick={() => deleteMeal(meal.idCategory)}>
+                          X
                         </button>
                       </div>
-                    )}
-                  </li>
-                </div>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          <div>
-            <p>No categories found..</p>
-          </div>
-        )}
+                      <div className="flex justify-center max-w-[500px] pb-4 relative">
+                        <img
+                          className="max-w-[400px]"
+                          src={meal.strCategoryThumb}
+                          alt={meal.strCategory}
+                        />
+                        <div className="absolute bottom-[-28px] right-0">
+                          <RateRecipe
+                            addRate={(newRate) =>
+                              handleRating(meal.idCategory, newRate)
+                            }
+                          />
+                          {/**fav */}
+                          <FaHeart
+                            color={
+                              fav.some(
+                                (favMeal) =>
+                                  favMeal.idCategory === meal.idCategory
+                              )
+                                ? "red"
+                                : "gray"
+                            } 
+                            onClick={() => handleAddFav(meal)}
+                            className="cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                      {editingId === meal.idCategory ? (
+                        <div className="">
+                          <h3 className="font-semibold text-[18px]">
+                            Edit Description:{" "}
+                          </h3>
+                          <textarea
+                            value={newDescription}
+                            onChange={(e) => setNewDescription(e.target.value)}
+                            className="border border-gray-300 p-2 w-full h-[150px]"
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          <h3 className="font-semibold text-[18px] pt-4">
+                            Description:{" "}
+                          </h3>
+
+                          <p className="">{meal.strCategoryDescription}</p>
+                        </div>
+                      )}
+                      {editingId === meal.idCategory ? (
+                        <div className="flex gap-4 justify-end">
+                          <button
+                            onClick={() =>
+                              saveUpdatedDescription(meal.idCategory)
+                            }
+                            className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-green-400 text-white hover:bg-green-600"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={closeEditForm}
+                            className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-red-400 text-white hover:bg-red-600"
+                          >
+                            Close
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex gap-4 justify-end">
+                          <button
+                            onClick={() => updateMeal(meal.idCategory)}
+                            className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-gray-400 text-white hover:bg-gray-600"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => deleteMeal(meal.idCategory)}
+                            className="rounded-md font-semibold uppercase tracking-wider px-4 py-1.5 bg-red-400 text-white hover:bg-red-600"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </li>
+                  </div>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div>
+              <p>No categories found..</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,49 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import AuthFlow from "../auth/AuthFlow";
+import { FaUser } from "react-icons/fa";
 
-function Nav() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // Kontrollera om en användare är inloggad
-    const user = localStorage.getItem("currentUser");
-    if (user) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("currentUser");
-    setIsLoggedIn(false);
-  };
-
-  if (!isLoggedIn) {
-    return <AuthFlow onLogin={handleLogin} />;
-  }
-
+function Nav({ onLogout }) {
   return (
-    <nav className="flex flex-row h-[80px] bg-pink-300 justify-center items-center px-4">
+    <nav className="flex flex-row relative h-[80px] bg-pink-300 justify-between items-center px-4">
       <div>
         <h1 className="text-center font-semibold text-[24px]">
           <Link to="/">Grupp 6</Link>
         </h1>
       </div>
-      <ul className="flex flex-row gap-4 mx-auto">
-        <Link to="/">Mock Data</Link> -<Link to="/apiPage">Api </Link>
+      <ul className="flex flex-row gap-4 mx-auto font-semibold text-[16px]">
+        <li className="hover:text-purple-800">
+          <Link to="/">Mock Data</Link>
+        </li>
+        <li className="hover:text-purple-800">
+          <Link to="/apiPage">Api </Link>
+        </li>
       </ul>
-      <div className="flex items-center justify-center p-2">
+      <div className="flex items-center justify-center absolute top-4 right-4">
         <button
-          className="bg-red-400 py-2 px-6 text-white rounded-md"
-          onClick={handleLogout}
+          className="bg-red-500 py-1 px-3 mx-4 text-[14px] text-black uppercase tracking-wider font-semibold rounded-md"
+          onClick={onLogout}
         >
           Logout
         </button>
+        <Link to="/UserPage" className="">
+          <FaUser size={18} className="hover:text-purple-600" />
+        </Link>
       </div>
+      
+
+      
     </nav>
   );
 }

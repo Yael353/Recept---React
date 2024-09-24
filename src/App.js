@@ -20,7 +20,9 @@ function App() {
           {showForm && <CreateRecipeForm />}
         </div>
       </div>
+      {/** 
       <GetRecipes2 />
+      */}
     </>
   );
 }

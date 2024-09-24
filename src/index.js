@@ -6,6 +6,8 @@ import ApiPage from "./pages/ApiPage";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./components/Layout";
+import NotFoundPage from "./pages/NotFound";
+import UserPage from "./pages/UserPage";
 
 const router = createBrowserRouter([
   {
@@ -16,10 +18,17 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
+        path: "/UserPage",
+        element: <UserPage />,
+      },
+     
+      {
         path: "/apiPage",
         element: <ApiPage />,
+        
       },
     ],
+    errorElement: <NotFoundPage />,
   },
 ]);
 

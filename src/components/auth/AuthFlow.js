@@ -1,7 +1,7 @@
 //växling av konpontenter mellan Login och Regsiter
 import React, { useState } from 'react';
-import Register from './Register';
-import Login from './Login';
+import Register from '../../pages/Register';
+import Login from '../../pages/Login';
 
 const AuthFlow = ({ onLogin }) => {
   const [showLogin, setShowLogin] = useState(true);

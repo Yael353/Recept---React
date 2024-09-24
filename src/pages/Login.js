@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const Login = ({ onLogin, toggleForm }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,9 +18,10 @@ const Login = ({ onLogin, toggleForm }) => {
     if (user) {
       localStorage.setItem("currentUser", JSON.stringify(user));
       onLogin();
-      alert("You are now logged in!");
+     // alert("You are now logged in!");
     } else {
-      alert("Oops! Invalid username or password!");
+      //alert("Oops! Invalid username or password!");
+      setLoginError("Oops! Invalid username or password!");
     }
   };
 
@@ -68,6 +70,7 @@ const Login = ({ onLogin, toggleForm }) => {
           >
             Login
           </button>
+          {loginError && <p className="text-red-600 text-[16px]">{loginError}</p>}
           <button
             className="bg-slate-600 text-white p-2 w-full rounded-md"
             onClick={toggleForm}
